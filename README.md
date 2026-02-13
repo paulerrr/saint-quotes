@@ -1,6 +1,6 @@
 # Saint Quotes
 
-1866 quotes from 224 saints across 302 topics in a portable SQLite database.
+1866 quotes from 224 Catholic saints across 302 topics in a portable SQLite database.
 
 ## Usage
 
