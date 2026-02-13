@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import Optional
 
 
-DEFAULT_DB = Path(__file__).resolve().parent / "output" / "saint_quotes.db"
+DEFAULT_DB = Path(__file__).resolve().parent / "saint_quotes.db"
 
 
 class Quote:

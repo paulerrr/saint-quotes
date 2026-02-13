@@ -1,34 +1,15 @@
-﻿# Saint Quotes Ingestion
+# Saint Quotes
 
-This project extracts quote records from:
-`A Dictionary of Quotes From th - Thigpen, Paul_6247.pdf`
+1866 quotes from 224 saints across 302 topics in a portable SQLite database.
 
-## 1) Extract structured records
+## Usage
 
-```powershell
-python scripts\extract_saint_quotes.py --pdf "A Dictionary of Quotes From th - Thigpen, Paul_6247.pdf" --outdir output
-```
-
-Outputs:
-- `output/saint_quotes.csv`
-- `output/saint_quotes.json`
-
-## 2) Build the SQLite database
-
-```powershell
-python scripts\build_db.py
-```
-
-Creates `output/saint_quotes.db` (~740 KB, 1866 quotes, 302 topics, 224 authors).
-
-## 3) Use in other projects
-
-Copy `saint_quotes.py` and `output/saint_quotes.db` into your project.
+Copy `saint_quotes.py` and `saint_quotes.db` into your project.
 
 ```python
 from saint_quotes import SaintQuotes
 
-sq = SaintQuotes("path/to/saint_quotes.db")
+sq = SaintQuotes("saint_quotes.db")
 
 sq.random()                     # one random quote
 sq.random(topic="PRAYER")       # random quote on a topic
@@ -41,7 +22,7 @@ sq.topics()                    # list all topics
 sq.authors()                   # list all authors
 
 # Quote objects have: .id, .topic, .quote, .author, .page
-# str(quote) gives a formatted string like:
+# str(quote) gives a formatted string:
 #   "Quote text here."
 #     — Author Name (on TOPIC)
 # quote.to_dict() returns a plain dict
@@ -64,9 +45,3 @@ async def quote(ctx, topic: str = None):
     else:
         await ctx.respond("No quotes found.")
 ```
-
-## Notes
-
-- The parser assigns `topic`, `quote`, `author`, and `page` from PDF text extraction.
-- Always keep provenance columns (source title/file/page) in your production DB.
-- Verify rights/licensing before publishing or redistributing quote content.
