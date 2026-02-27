@@ -30,10 +30,10 @@ DEFAULT_DB = Path(__file__).resolve().parent / "saint_quotes.db"
 
 
 class Quote:
-    __slots__ = ("id", "topic", "quote", "author", "page")
+    __slots__ = ("id", "topic", "quote", "author", "page", "source_id")
 
     def __init__(self, row: tuple) -> None:
-        self.id, self.topic, self.quote, self.author, self.page = row
+        self.id, self.topic, self.quote, self.author, self.page, self.source_id = row
 
     def __repr__(self) -> str:
         return f"Quote({self.id}, {self.author!r}, {self.quote[:50]!r}...)"
@@ -48,6 +48,7 @@ class Quote:
             "quote": self.quote,
             "author": self.author,
             "page": self.page,
+            "source_id": self.source_id,
         }
 
 
@@ -67,7 +68,7 @@ class SaintQuotes:
 
     # --- queries ---
 
-    _COLS = "id, topic, quote, author, page"
+    _COLS = "id, topic, quote, author, page, source_id"
 
     def random(
         self,
@@ -128,6 +129,22 @@ class SaintQuotes:
                 "SELECT DISTINCT author FROM saint_quotes ORDER BY author"
             ).fetchall()
         ]
+
+    def sources(self) -> list[dict]:
+        """List all sources."""
+        rows = self._con.execute(
+            "SELECT id, title, author, publisher, year, isbn FROM sources ORDER BY id"
+        ).fetchall()
+        keys = ("id", "title", "author", "publisher", "year", "isbn")
+        return [dict(zip(keys, r)) for r in rows]
+
+    def by_source(self, source_id: int) -> list[Quote]:
+        """All quotes from a given source."""
+        rows = self._con.execute(
+            f"SELECT {self._COLS} FROM saint_quotes WHERE source_id = ? ORDER BY id",
+            (source_id,),
+        ).fetchall()
+        return [Quote(r) for r in rows]
 
     def count(self) -> int:
         return self._con.execute("SELECT COUNT(*) FROM saint_quotes").fetchone()[0]
