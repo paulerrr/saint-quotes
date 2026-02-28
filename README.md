@@ -1,6 +1,6 @@
 # Saint Quotes
 
-1866 quotes from 224 Catholic saints across 302 topics in a portable SQLite database.
+1913 quotes from 207 Catholic saints across 304 topics in a portable SQLite database.
 
 ## Usage
 
@@ -20,8 +20,10 @@ sq.by_author("Thomas Aquinas") # all quotes by an author
 sq.by_topic("HUMILITY")       # all quotes under a topic
 sq.topics()                    # list all topics
 sq.authors()                   # list all authors
+sq.sources()                   # list source books
+sq.count()                     # total number of quotes
 
-# Quote objects have: .id, .topic, .quote, .author, .page
+# Quote objects have: .id, .topic, .quote, .author, .source_id
 # str(quote) gives a formatted string:
 #   "Quote text here."
 #     — Author Name (on TOPIC)
